@@ -1,0 +1,7 @@
+node_modules
+.serverless
+/.docker
+/.s3_buckets
+/src/lambdas/api/openapi.yml
+/.vscode
+.coverage

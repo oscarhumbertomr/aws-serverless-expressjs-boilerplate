@@ -1,0 +1,77 @@
+get:
+    tags:
+        - user
+    description: retrive user
+    operationId: GetUser
+    security:
+        - bearerAuth: []
+    parameters:
+        - in: query
+          name: id
+          required: false
+          schema:
+                type: string
+    responses:
+        '200':
+            description: Successful request
+            content:
+                application/json:
+                    schema:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                            - userId
+                            - name
+                            - email
+                        properties:
+                            userId:
+                                type: string
+                            name:
+                                type: string
+                            email:
+                                type: string
+        '403':
+            $ref: '../../main_openapi.yml#/components/responses/Unauthorized'
+post:
+    description: PostUser
+    tags:
+        - user
+    operationId: CreateUser
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    title: v1-create-user-request
+                    type: object
+                    required:
+                        - email
+                        - name
+                    properties:
+                        email:
+                            type: string
+                        name:
+                            type: string
+    responses:
+        '200':
+            description: Successful request
+            content:
+                application/json:
+                    schema:
+                      type: object
+                      required:
+                          - userId
+                          - name
+                          - email
+                      properties:
+                          userId:
+                              type: string
+                          name:
+                              type: string
+                          email:
+                              type: string
+        '400':
+            $ref: '../../main_openapi.yml#/components/responses/BadRequest'
+        '403':
+            $ref: '../../main_openapi.yml#/components/responses/Unauthorized'

@@ -1,0 +1,51 @@
+openapi: 3.1.0
+info:
+    title: Example Boilerplate serverless
+    version: 1.0.0
+    description: This is an example
+    contact:
+        name: Oscar.montejo
+        email: oscar.montejo@email.com
+        url: https://developer.oscarmontejo.com/
+
+tags:
+    - name: user
+      description: Everything about your Users
+
+servers:
+    - url: http://localhost:8000
+    - url: https://{environment}-domain-example.com/api
+      variables:
+          environment:
+              default: dev
+              enum:
+                  - dev
+                  - qa
+                  - uat
+                  - prod
+
+paths:
+    /v1/user:
+        $ref: './openapi_refs/paths/v1.user.path.yml'
+        
+components:
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+    responses:
+        Unauthorized:
+            $ref: './openapi_refs/responses/unauthorized.yml'
+        BadRequest:
+            $ref: './openapi_refs/responses/badRequest.yml'
+        NotFound:
+            $ref: './openapi_refs/responses/notFound.yml'
+        NotAcceptable:
+            $ref: './openapi_refs/responses/notAcceptable.yml'
+        Conflict:
+            $ref: './openapi_refs/responses/conflict.yml'
+        NotModified:
+            $ref: './openapi_refs/responses/notModified.yml'
+        ServiceUnavailable:
+            $ref: './openapi_refs/responses/serviceUnavailable.yml'
+

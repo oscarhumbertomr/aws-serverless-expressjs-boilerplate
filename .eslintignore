@@ -1,0 +1,8 @@
+node_modules
+.serverless
+.vscode
+# *.test.js
+eslint.config.mjs
+# .webpack
+# _warmup
+# **/*.js

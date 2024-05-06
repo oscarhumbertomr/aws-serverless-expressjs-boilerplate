@@ -1,0 +1,5 @@
+description: Unauthorized request
+content:
+    application/json:
+        schema:
+            $ref: './base-error-response.yml'

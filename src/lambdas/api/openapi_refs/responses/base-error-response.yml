@@ -1,0 +1,7 @@
+title: base-error-response
+type: object
+properties:
+    errors:
+        type: array
+        items:
+            type: string

@@ -1,0 +1,5 @@
+description: Not modified
+content:
+    application/json:
+        schema:
+            $ref: './base-error-response.yml'

@@ -1,0 +1,88 @@
+service: aws-node-express-dynamodb-api-project
+frameworkVersion: '3'
+
+custom:
+  tableUserName: 'users-table-${sls:stage}'
+  serverless-offline:
+        httpPort: 8000
+        stage: local
+        prefix: ${self:service}
+        region: us-east-2
+        noAuth: true
+        noPrependStageInUrl: true
+  dynamodb:
+        stages:
+            - local
+        start:
+            docker: true
+            port: 8001
+            inMemory: true
+            migrate: true
+            seed: true
+            convertEmptyValues: true
+            noStart: true
+  s3:
+    host: localhost
+    port: 8002
+    directory: ./.s3_buckets
+    aws_access_key_id: S3RVER
+    aws_secret_access_key: S3RVER
+
+
+
+plugins:
+  - serverless-s3-local
+  - serverless-dynamodb-local
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [ UsersTable, Arn ]
+  environment:
+    USERS_TABLE: ${self:custom.tableUserName}
+
+functions:
+  api:
+    handler: src/lambdas/api/index.handler
+    timeout: ${file(./aws/utils/timeout.js)}
+    events:
+      - httpApi: '*'
+  # v1-s3-postprocess:
+  #   handler: src/lambdas/s3/postprocess_s3.handler
+  #   description: trigger a lambda to postprocess files on s3 
+  #   memorySize: 512
+  #   events:
+  #     - s3:
+  #         bucket: local-bucket
+  #         event: s3:ObjectCreated:*
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableUserName}
+    NewResource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: local-bucket
