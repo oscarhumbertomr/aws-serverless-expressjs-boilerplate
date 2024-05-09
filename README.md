@@ -140,21 +140,16 @@ To learn more about the capabilities of `serverless-offline` and `serverless-dyn
 
 # aws-serverless-expressjs-boilerplate
 
-docker compose up -d
 
- ~/.aws/credentials
+Add this to AWS config if needed 
 
+```
 [s3local]
 aws_access_key_id = S3RVER
 aws_secret_access_key = S3RVER
+```
 
 aws configure --profile s3local
-
-nvm use
-
-npm run dev
-
-aws --endpoint http://localhost:8002 s3 cp ./test/mock/s3/data.csv s3://local-bucket/userdata2.csv --profile s3local
 
 TODO
 - INCREASE TIMEOUT ON LOCAL
@@ -167,3 +162,63 @@ TODO
 
 
 https://blog.stoplight.io/difference-between-open-v2-v3-v31
+
+# HOW TO RUN
+
+Install AWS CLI
+
+Create Docker container for DynamoDb Local
+
+```
+docker compose up -d
+```
+
+Use Node v20.12.2
+
+```
+nvm use
+```
+
+Install dependencies
+
+```
+npm i
+```
+
+Run serverless local
+
+```
+npm run dev
+```
+
+Run dynamodb UI (dynamodb-admin)
+
+```
+npm run ddb
+```
+
+# MORE TOOLS
+
+Run S3 lambda (run serverless local before)
+
+```
+npm run test-s3
+```
+
+Run Jest
+
+```
+npm use test
+```
+
+Run linter
+
+```
+npm run lint
+```
+
+Create openapi.yml
+
+```
+npm run openapi-swagger
+```
