@@ -10,7 +10,7 @@ custom:
         region: us-east-2
         noAuth: true
         noPrependStageInUrl: true
-  dynamodb:
+  serverless-dynamodb:
         stages:
             - local
         start:
@@ -32,12 +32,15 @@ custom:
 
 plugins:
   - serverless-s3-local
-  - serverless-dynamodb-local
+  - serverless-dynamodb
+  - serverless-deployment-bucket
   - serverless-offline
 
 provider:
   name: aws
   runtime: nodejs20.x
+  deploymentBucket:
+    name: custom-deployment-bucket
   iam:
     role:
       statements:
@@ -60,14 +63,14 @@ functions:
     timeout: ${file(./aws/utils/timeout.js)}
     events:
       - httpApi: '*'
-  # v1-s3-postprocess:
-  #   handler: src/lambdas/s3/postprocess_s3.handler
-  #   description: trigger a lambda to postprocess files on s3 
-  #   memorySize: 512
-  #   events:
-  #     - s3:
-  #         bucket: local-bucket
-  #         event: s3:ObjectCreated:*
+  v1-s3-postprocess:
+    handler: src/lambdas/s3/postprocess_s3.handler
+    description: trigger a lambda to postprocess files on s3 
+    memorySize: 512
+    events:
+      - s3:
+          bucket: local-bucket
+          event: s3:ObjectCreated:*
 
 resources:
   Resources:
